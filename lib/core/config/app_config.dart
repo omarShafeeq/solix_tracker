@@ -28,7 +28,7 @@ abstract final class AppConfig {
     defaultValue: 100,
   );
 
-  /// Maximum GPS points requested for a trip.
+  /// Maximum GPS points requested for
   ///
   /// The sample request uses `point_limit: 10`, which is too small to draw a
   /// route. 1000 is sent instead so the map can show the path. Change this
