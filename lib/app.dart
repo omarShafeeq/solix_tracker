@@ -4,6 +4,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'core/di/injection.dart';
 import 'core/theme/app_theme.dart';
+import 'features/auth/presentation/cubits/auth_cubit.dart';
+import 'features/auth/presentation/cubits/auth_state.dart';
+import 'features/auth/presentation/pages/login_page.dart';
 import 'features/dashboard/presentation/pages/dashboard_page.dart';
 import 'features/map/presentation/cubits/map_cubit.dart';
 import 'features/tracker/presentation/cubits/live_tracking_cubit.dart';
@@ -18,6 +21,7 @@ class FleetTrackerApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<AuthCubit>(create: (_) => getIt<AuthCubit>()),
         BlocProvider<TrackersCubit>(create: (_) => getIt<TrackersCubit>()),
         BlocProvider<TrackerDetailsCubit>(
           create: (_) => getIt<TrackerDetailsCubit>(),
@@ -41,8 +45,25 @@ class FleetTrackerApp extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         theme: AppTheme.light(),
-        home: const DashboardPage(),
+        home: const _AuthGate(),
       ),
+    );
+  }
+}
+
+class _AuthGate extends StatelessWidget {
+  const _AuthGate();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AuthCubit, AuthState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        if (state.status == AuthStatus.authenticated) {
+          return const DashboardPage();
+        }
+        return const LoginPage();
+      },
     );
   }
 }

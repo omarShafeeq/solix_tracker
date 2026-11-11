@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 
+import '../../features/auth/presentation/cubits/auth_cubit.dart';
 import '../../features/tracker/data/datasources/tracker_remote_datasource.dart';
 import '../../features/tracker/domain/repositories/tracker_repository.dart';
 import '../../features/tracker/domain/repositories/tracker_repository_impl.dart';
@@ -51,4 +52,5 @@ void configureDependencies() {
     () => TripHistoryCubit(getIt<TripRepository>()),
   );
   getIt.registerFactory<MapCubit>(MapCubit.new);
+  getIt.registerLazySingleton<AuthCubit>(AuthCubit.new);
 }
